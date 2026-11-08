@@ -1,0 +1,93 @@
+<view class="container">
+  <!-- 类型切换 -->
+  <view class="type-tabs">
+    <view 
+      class="type-tab {{type === 'expense' ? 'active' : ''}}"
+      data-type="expense"
+      bindtap="switchType"
+    >
+      支出
+    </view>
+    <view 
+      class="type-tab {{type === 'income' ? 'active' : ''}}"
+      data-type="income"
+      bindtap="switchType"
+    >
+      收入
+    </view>
+  </view>
+
+  <!-- 金额输入 -->
+  <view class="amount-card">
+    <view class="amount-label">金额</view>
+    <view class="amount-input-wrap">
+      <text class="currency">¥</text>
+      <input 
+        class="amount-input"
+        type="digit"
+        placeholder="0.00"
+        value="{{amount}}"
+        bindinput="inputAmount"
+        focus
+      />
+    </view>
+  </view>
+
+  <!-- 分类选择 -->
+  <view class="category-card">
+    <view class="card-title">选择分类</view>
+    <view class="category-grid">
+      <block wx:if="{{type === 'expense'}}">
+        <view 
+          wx:for="{{expenseCategories}}"
+          wx:key="name"
+          class="category-item {{selectedCategory === item.name ? 'selected' : ''}}"
+          data-category="{{item.name}}"
+          bindtap="selectCategory"
+        >
+          <text class="category-icon">{{item.icon}}</text>
+          <text class="category-name">{{item.name}}</text>
+        </view>
+      </block>
+      <block wx:else>
+        <view 
+          wx:for="{{incomeCategories}}"
+          wx:key="name"
+          class="category-item {{selectedCategory === item.name ? 'selected' : ''}}"
+          data-category="{{item.name}}"
+          bindtap="selectCategory"
+        >
+          <text class="category-icon">{{item.icon}}</text>
+          <text class="category-name">{{item.name}}</text>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 日期选择 -->
+  <view class="date-card">
+    <text class="card-title">日期</text>
+    <picker mode="date" value="{{date}}" bindchange="changeDate">
+      <view class="date-picker">
+        <text>{{date}}</text>
+        <text class="arrow">›</text>
+      </view>
+    </picker>
+  </view>
+
+  <!-- 备注 -->
+  <view class="note-card">
+    <text class="card-title">备注</text>
+    <input 
+      class="note-input"
+      placeholder="添加备注（选填）"
+      value="{{note}}"
+      bindinput="inputNote"
+    />
+  </view>
+
+  <!-- 保存按钮 -->
+  <view class="save-btn" bindtap="save">
+    保存
+  </view>
+</view>

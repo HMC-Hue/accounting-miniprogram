@@ -1,0 +1,156 @@
+/* 添加页样式 */
+
+/* 类型切换 */
+.type-tabs {
+  display: flex;
+  background: #fff;
+  border-radius: 50rpx;
+  padding: 8rpx;
+  margin-bottom: 30rpx;
+}
+
+.type-tab {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 0;
+  font-size: 28rpx;
+  color: #666;
+  border-radius: 50rpx;
+  transition: all 0.3s;
+}
+
+.type-tab.active {
+  background: #1a1a1a;
+  color: #fff;
+  font-weight: 500;
+}
+
+/* 金额卡片 */
+.amount-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 40rpx 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.amount-label {
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 20rpx;
+}
+
+.amount-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.currency {
+  font-size: 48rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.amount-input {
+  flex: 1;
+  font-size: 64rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 分类卡片 */
+.category-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.card-title {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 24rpx;
+  display: block;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24rpx;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+  padding: 20rpx 10rpx;
+  border-radius: 16rpx;
+  transition: all 0.2s;
+}
+
+.category-item.selected {
+  background: #fff0f0;
+}
+
+.category-icon {
+  font-size: 48rpx;
+}
+
+.category-name {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.category-item.selected .category-name {
+  color: #ee5a5a;
+  font-weight: 500;
+}
+
+/* 日期卡片 */
+.date-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.date-picker {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.arrow {
+  color: #999;
+  font-size: 36rpx;
+}
+
+/* 备注卡片 */
+.note-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 40rpx;
+}
+
+.note-input {
+  font-size: 28rpx;
+  color: #333;
+  padding: 10rpx 0;
+}
+
+/* 保存按钮 */
+.save-btn {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+  color: #fff;
+  text-align: center;
+  padding: 28rpx 0;
+  border-radius: 50rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  box-shadow: 0 8rpx 20rpx rgba(238, 90, 90, 0.3);
+}

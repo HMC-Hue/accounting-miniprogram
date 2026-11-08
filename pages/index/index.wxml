@@ -1,0 +1,137 @@
+<view class="container">
+  <!-- 顶部统计卡片 -->
+  <view class="stats-card">
+    <view class="stats-header">
+      <text class="stats-title">本月结余 (元)</text>
+      <text class="vip-badge">VIP</text>
+    </view>
+    <view class="stats-balance">{{stats.balance.toFixed(2)}}</view>
+    <view class="stats-row">
+      <view class="stats-item">
+        <text class="stats-label">收入</text>
+        <text class="stats-value text-income">{{stats.income.toFixed(2)}}</text>
+      </view>
+      <view class="stats-divider"></view>
+      <view class="stats-item">
+        <text class="stats-label">支出</text>
+        <text class="stats-value text-expense">{{stats.expense.toFixed(2)}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能图标 -->
+  <view class="function-row">
+    <view class="function-item" data-key="report" bindtap="onFunctionTap">
+      <view class="function-icon">📊</view>
+      <text class="function-text">报表</text>
+    </view>
+    <view class="function-item" data-key="asset" bindtap="onFunctionTap">
+      <view class="function-icon">💰</view>
+      <view class="function-text">资产</view>
+    </view>
+    <view class="function-item" data-key="budget" bindtap="onFunctionTap">
+      <view class="function-icon">🏷️</view>
+      <text class="function-text">预算</text>
+    </view>
+    <view class="function-item" data-key="setting" bindtap="onFunctionTap">
+      <view class="function-icon">⚙️</view>
+      <text class="function-text">设置</text>
+    </view>
+  </view>
+
+  <!-- 预算卡片 -->
+  <view class="budget-card" bindtap="openBudgetModal">
+    <block wx:if="{{budgetInfo.hasBudget}}">
+      <view class="budget-header">
+        <text class="budget-title">本月预算</text>
+        <text class="budget-amount">{{budget.toFixed(2)}} 元</text>
+      </view>
+      <view class="progress-track">
+        <view class="progress-fill {{budgetInfo.overBudget ? 'over' : ''}}" style="width: {{budgetInfo.percent}}%;"></view>
+      </view>
+      <view class="budget-footer">
+        <text class="budget-percent {{budgetInfo.overBudget ? 'text-expense' : ''}}">已用 {{budgetInfo.percent}}%</text>
+        <text wx:if="{{budgetInfo.overBudget}}" class="text-expense">已超支 {{(-budgetInfo.remaining).toFixed(2)}} 元</text>
+        <text wx:else class="budget-remaining">剩余 {{budgetInfo.remaining.toFixed(2)}} 元</text>
+      </view>
+    </block>
+    <view wx:else class="budget-empty">
+      <text class="budget-empty-text">还没有设置本月预算</text>
+      <text class="budget-empty-hint">点击设置，控制每月支出</text>
+    </view>
+  </view>
+
+  <!-- 记录列表 -->
+  <view class="list-section">
+    <view class="list-title">
+      <text>记账记录</text>
+    </view>
+
+    <!-- 按日期分组的记录 -->
+    <block wx:for="{{groupedRecords}}" wx:key="date" wx:for-item="group">
+      <view class="date-group">
+        <view class="date-label">{{group.dateLabel}}</view>
+
+        <view class="record-card">
+          <block wx:for="{{group.records}}" wx:key="id" wx:for-item="record">
+            <view class="record-item" bindlongpress="deleteRecord" data-id="{{record.id}}">
+              <view class="record-left">
+                <view class="record-icon">
+                  {{record.category === '餐饮' ? '🍜' :
+                    record.category === '交通' ? '🚗' :
+                    record.category === '购物' ? '🛒' :
+                    record.category === '娱乐' ? '🎮' :
+                    record.category === '医疗' ? '🏥' :
+                    record.category === '工资' ? '💼' :
+                    record.category === '奖金' ? '🎁' :
+                    record.category === '理财' ? '📈' : '📝'}}
+                </view>
+                <view class="record-info">
+                  <text class="record-category">{{record.category}}</text>
+                  <text class="record-note" wx:if="{{record.note}}">{{record.note}}</text>
+                </view>
+              </view>
+              <view class="record-amount {{record.type === 'income' ? 'text-income' : 'text-expense'}}">
+                {{record.type === 'income' ? '+' : '-'}}{{record.amount.toFixed(2)}}
+              </view>
+            </view>
+          </block>
+        </view>
+      </view>
+    </block>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{groupedRecords.length === 0}}">
+      <text class="empty-icon">📝</text>
+      <text class="empty-text">还没有记账记录</text>
+      <text class="empty-hint">点击下方按钮添加第一笔</text>
+    </view>
+  </view>
+
+  <!-- 底部添加按钮 -->
+  <view class="add-button" bindtap="goAdd">
+    <text class="add-icon">+</text>
+  </view>
+
+  <!-- 预算设置弹窗 -->
+  <view class="modal-mask" wx:if="{{showBudgetModal}}" bindtap="closeBudgetModal">
+    <view class="modal-card" catchtap="noop">
+      <text class="modal-title">设置本月预算</text>
+      <view class="modal-input-wrap">
+        <text class="currency">¥</text>
+        <input
+          class="modal-input"
+          type="digit"
+          placeholder="请输入预算金额"
+          value="{{budgetInput}}"
+          bindinput="inputBudget"
+          focus
+        />
+      </view>
+      <view class="modal-actions">
+        <view class="modal-btn cancel" bindtap="closeBudgetModal">取消</view>
+        <view class="modal-btn confirm" bindtap="confirmBudget">确定</view>
+      </view>
+    </view>
+  </view>
+</view>
