@@ -7,13 +7,21 @@ Page({
       expense: 0,
       balance: 0
     },
+    statsText: {
+      income: '0.00',
+      expense: '0.00',
+      balance: '0.00'
+    },
     groupedRecords: [],
     currentYear: 0,
     currentMonth: 0,
     budget: 0,
+    budgetText: '0.00',
     budgetInfo: {
       percent: 0,
       remaining: 0,
+      remainingText: '0.00',
+      overText: '0.00',
       overBudget: false,
       hasBudget: false
     },
@@ -41,8 +49,13 @@ Page({
   loadData() {
     const { currentYear, currentMonth } = this.data;
 
-    // 月度统计
+    // 月度统计（数值保留给逻辑，显示文本单独格式化）
     const stats = storage.getMonthStats(currentYear, currentMonth);
+    const statsText = {
+      balance: stats.balance.toFixed(2),
+      income: stats.income.toFixed(2),
+      expense: stats.expense.toFixed(2)
+    };
 
     // 月度预算及进度
     const budget = storage.getBudget(currentYear, currentMonth);
@@ -50,24 +63,37 @@ Page({
     const percent = hasBudget
       ? Math.min(100, Math.round((stats.expense / budget) * 100))
       : 0;
+    const remaining = Math.round((budget - stats.expense) * 100) / 100;
     const budgetInfo = {
       hasBudget,
       percent,
-      remaining: Math.round((budget - stats.expense) * 100) / 100,
+      remaining,
+      remainingText: remaining.toFixed(2),
+      overText: (-remaining).toFixed(2),
       overBudget: hasBudget && stats.expense > budget
     };
 
-    // 所有记录并按日期分组，附加友好日期标签
+    // 所有记录并按日期分组，附加友好日期标签与金额显示文本
     const allRecords = storage.getRecords();
     const groupedRecords = storage.groupByDate(allRecords).map(group => ({
       date: group.date,
       dateLabel: this.getDateLabel(group.date),
-      records: group.records
+      records: group.records.map(record => ({
+        id: record.id,
+        type: record.type,
+        amount: record.amount,
+        amountText: record.amount.toFixed(2),
+        category: record.category,
+        date: record.date,
+        note: record.note
+      }))
     }));
 
     this.setData({
       stats,
+      statsText,
       budget,
+      budgetText: budget.toFixed(2),
       budgetInfo,
       groupedRecords
     });
